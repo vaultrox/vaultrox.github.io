@@ -1,0 +1,82 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+    padding: 20px;
+    color: #333;
+    padding-bottom: 80px; /* Add a padding at the bottom of the body equal to the footer's height */
+}
+
+header {
+    text-align: center;
+    padding: 20px;
+    border-bottom: 1px solid #ddd;
+}
+
+.container {
+    margin: 0 auto;
+    padding: 20px;
+    max-width: 800px;
+}
+
+h1, h2, h3 {
+    color: #444;
+}
+
+section {
+    margin: 20px 0;
+}
+
+.roadmap-item {
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    padding: 20px;
+    margin-bottom: 20px;
+}
+
+.airdrop-btn {
+    display: inline-block;
+    color: #fff;
+    background-color: #007BFF;
+    border: none;
+    border-radius: 5px;
+    padding: 10px 20px;
+    margin-top: 10px;
+    text-decoration: none;
+    font-size: 16px;
+    transition: background-color 0.3s;
+}
+
+.airdrop-btn:hover {
+    background-color: #0056b3;
+}
+
+.url-inpt {
+    display: inline-block;
+    border: none;
+    border-radius: 5px;
+    padding: 10px 20px;
+    margin-top: 10px;
+    text-decoration: none;
+    font-size: 16px;
+}
+
+footer {
+    text-align: center;
+    border-top: 1px solid #ddd;
+    position: fixed; /* Fix position of footer */
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    background-color: #f4f4f4;
+}
+
+a {
+    color: #007BFF;
+    text-decoration: none;
+}
+
+a:hover {
+    color: #0056b3;
+    text-decoration: underline;
+}

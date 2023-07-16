@@ -1,0 +1,571 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Vaultrox Token Airdrop</title>
+    <link rel="stylesheet" type="text/css" href="styles.css">
+    <link rel="icon" href="img/logo.png" type="image/x-icon">
+    <script>
+    window.addEventListener('load', async () => {
+        // Modern dapp browsers...
+        if (window.ethereum) {
+            window.web3 = new Web3(ethereum);
+            try {
+                // Request account access if needed
+                await ethereum.enable();
+                // Acccounts now exposed
+            } catch (error) {
+                // User denied account access...
+                console.error("User denied account access")
+            }
+        }
+        // Legacy dapp browsers...
+        else if (window.web3) {
+            window.web3 = new Web3(web3.currentProvider);
+            // Acccounts always exposed
+        }
+        // Non-dapp browsers...
+        else {
+            console.log('Non-Ethereum browser detected. You should consider trying MetaMask!');
+        }
+
+        let chainId = await web3.eth.getChainId();
+        if(chainId != 56){
+            try {
+                // add BSC Mainnet to user's Metamask
+                let added = await ethereum.request({
+                    method: 'wallet_addEthereumChain',
+                    params: [
+                        {
+                            chainId: '0x38', // 56 in decimal
+                            chainName: 'Binance Smart Chain Mainnet',
+                            nativeCurrency: {
+                                name: 'BNB',
+                                symbol: 'bnb',
+                                decimals: 18
+                            },
+                            rpcUrls: ['https://bsc-dataseed1.defibit.io'],
+                            blockExplorerUrls: ['https://bscscan.com/'],
+                        }
+                    ]
+                });
+                console.log('BSC Mainnet added', added);
+            } catch (error) {
+                console.log(error);
+            }
+        }
+    });
+    </script>
+</head>
+<body>
+    <header>
+        <h1>🚀 VTOX Token Airdrop</h1>
+    </header>
+    <div class="container">
+        <section>
+            <h2>Add Token to Wallet</h2>
+            <p>You can manually add the token to your wallet using the following contract address: <code>0x9575c859371F1d440e5D8bE27F87E5C17820C77f</code>
+            <button id="copyAddrBtn" class="airdrop-btn" onclick="copyContractAddr()">Copy Contract Address</button></p>
+        </section>
+        <section>
+            <h2>Claim Your Airdrop</h2>
+            <p>To claim 1 - 10000 VTOX tokens, please click on the button below. You can also earn BNB by referring others. Simply share your referral link provided below. Every successful referral will reward you with 0.005 BNB.</p>
+            <button id="airdropBtn" class="airdrop-btn">Claim Airdrop</button>
+        </section>
+        <section>
+            <h2>Your Referral Link</h2>
+            <p>Share this link to earn 0.005 for each referral.</p>
+            <button id="copyBtn" class="airdrop-btn">Copy Link</button>
+            <h2>Your Referral Stats</h2>
+            <p id="referralStats"></p>
+        </section>
+    </div>
+    <footer>
+        <p>Follow us on <a href="https://t.me/vaultrox">Telegram</a> and check us out on <a href="soon.html">CoinMarketCap</a>!</p>
+    </footer>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/web3/1.2.9/web3.min.js"></script>
+    <script>
+    function copyContractAddr(){
+        var copyBtn = document.getElementById("copyAddrBtn");
+        navigator.clipboard.writeText('0x9575c859371F1d440e5D8bE27F87E5C17820C77f');
+        alert('Contract address copied to clipboard!')
+    }
+    // Connect to Metamask
+    if (typeof window.ethereum !== 'undefined') {
+        console.log('MetaMask is installed!');
+        window.web3 = new Web3(ethereum);
+    }
+
+    var contractAddress = "0x9575c859371F1d440e5D8bE27F87E5C17820C77f";  // Replace with your contract address
+    var abi = [
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "referrerAddress",
+				"type": "address"
+			}
+		],
+		"name": "airdrop",
+		"outputs": [],
+		"stateMutability": "payable",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"stateMutability": "nonpayable",
+		"type": "constructor"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": true,
+				"internalType": "address",
+				"name": "owner",
+				"type": "address"
+			},
+			{
+				"indexed": true,
+				"internalType": "address",
+				"name": "spender",
+				"type": "address"
+			},
+			{
+				"indexed": false,
+				"internalType": "uint256",
+				"name": "value",
+				"type": "uint256"
+			}
+		],
+		"name": "Approval",
+		"type": "event"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "spender",
+				"type": "address"
+			},
+			{
+				"internalType": "uint256",
+				"name": "amount",
+				"type": "uint256"
+			}
+		],
+		"name": "approve",
+		"outputs": [
+			{
+				"internalType": "bool",
+				"name": "",
+				"type": "bool"
+			}
+		],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "spender",
+				"type": "address"
+			},
+			{
+				"internalType": "uint256",
+				"name": "subtractedValue",
+				"type": "uint256"
+			}
+		],
+		"name": "decreaseAllowance",
+		"outputs": [
+			{
+				"internalType": "bool",
+				"name": "",
+				"type": "bool"
+			}
+		],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "spender",
+				"type": "address"
+			},
+			{
+				"internalType": "uint256",
+				"name": "addedValue",
+				"type": "uint256"
+			}
+		],
+		"name": "increaseAllowance",
+		"outputs": [
+			{
+				"internalType": "bool",
+				"name": "",
+				"type": "bool"
+			}
+		],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": true,
+				"internalType": "address",
+				"name": "previousOwner",
+				"type": "address"
+			},
+			{
+				"indexed": true,
+				"internalType": "address",
+				"name": "newOwner",
+				"type": "address"
+			}
+		],
+		"name": "OwnershipTransferred",
+		"type": "event"
+	},
+	{
+		"inputs": [],
+		"name": "renounceOwnership",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "bool",
+				"name": "enabled",
+				"type": "bool"
+			}
+		],
+		"name": "toggleAirdrop",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "to",
+				"type": "address"
+			},
+			{
+				"internalType": "uint256",
+				"name": "amount",
+				"type": "uint256"
+			}
+		],
+		"name": "transfer",
+		"outputs": [
+			{
+				"internalType": "bool",
+				"name": "",
+				"type": "bool"
+			}
+		],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": true,
+				"internalType": "address",
+				"name": "from",
+				"type": "address"
+			},
+			{
+				"indexed": true,
+				"internalType": "address",
+				"name": "to",
+				"type": "address"
+			},
+			{
+				"indexed": false,
+				"internalType": "uint256",
+				"name": "value",
+				"type": "uint256"
+			}
+		],
+		"name": "Transfer",
+		"type": "event"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "from",
+				"type": "address"
+			},
+			{
+				"internalType": "address",
+				"name": "to",
+				"type": "address"
+			},
+			{
+				"internalType": "uint256",
+				"name": "amount",
+				"type": "uint256"
+			}
+		],
+		"name": "transferFrom",
+		"outputs": [
+			{
+				"internalType": "bool",
+				"name": "",
+				"type": "bool"
+			}
+		],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "newOwner",
+				"type": "address"
+			}
+		],
+		"name": "transferOwnership",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "airdropEnabled",
+		"outputs": [
+			{
+				"internalType": "bool",
+				"name": "",
+				"type": "bool"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "",
+				"type": "address"
+			}
+		],
+		"name": "airdropped",
+		"outputs": [
+			{
+				"internalType": "bool",
+				"name": "",
+				"type": "bool"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "owner",
+				"type": "address"
+			},
+			{
+				"internalType": "address",
+				"name": "spender",
+				"type": "address"
+			}
+		],
+		"name": "allowance",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "account",
+				"type": "address"
+			}
+		],
+		"name": "balanceOf",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "decimals",
+		"outputs": [
+			{
+				"internalType": "uint8",
+				"name": "",
+				"type": "uint8"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "referrerAddress",
+				"type": "address"
+			}
+		],
+		"name": "getReferrerCount",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "name",
+		"outputs": [
+			{
+				"internalType": "string",
+				"name": "",
+				"type": "string"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "owner",
+		"outputs": [
+			{
+				"internalType": "address",
+				"name": "",
+				"type": "address"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "",
+				"type": "address"
+			}
+		],
+		"name": "referrerCount",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "symbol",
+		"outputs": [
+			{
+				"internalType": "string",
+				"name": "",
+				"type": "string"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "totalSupply",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	}
+];  // Replace with the ABI of your contract
+
+    var contract = new web3.eth.Contract(abi, contractAddress);
+
+    var btn = document.getElementById("airdropBtn");
+    var params = new URLSearchParams(window.location.search);
+    var referrer = params.get('referrer');
+
+    btn.addEventListener('click', function() {
+        ethereum.request({ method: 'eth_requestAccounts' })
+        .then(function(accounts) {
+            return contract.methods.airdrop(referrer)
+            .send({from: accounts[0], value: web3.utils.toWei('0.01', 'ether')})
+            .on('transactionHash', function(hash){
+                alert("Transaction confirmed! Transaction hash: " + hash);
+            })
+            .on('confirmation', function(confirmationNumber, receipt){
+                console.log("Confirmed. Number: " + confirmationNumber);
+                console.log(receipt);
+            })
+            .on('error', console.error);
+        })
+        .catch(console.error);
+    });
+
+    ethereum.request({ method: 'eth_requestAccounts' })
+    .then(function(accounts) {
+        var referralUrl = window.location.href.split('?')[0] + "?referrer=" + accounts[0];
+        
+        var copyBtn = document.getElementById("copyBtn");
+        copyBtn.addEventListener('click', function() {
+            navigator.clipboard.writeText(referralUrl);
+            alert('Link copied to clipboard!')
+        });
+
+        return contract.methods.getReferrerCount(accounts[0])
+        .call()
+        .then(function(count) {
+            var stats = document.getElementById("referralStats");
+            var earnings = count * 0.005;
+            stats.innerText = "You have referred " + count + " people and earned " + earnings + " BNB.";
+        });
+    })
+    .catch(console.error);
+    </script>
+</body>
+</html>
